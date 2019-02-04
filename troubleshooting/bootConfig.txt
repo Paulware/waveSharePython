@@ -1,0 +1,4 @@
+hdmi_group=2
+hdmi_mode=87
+hdmi_force_mode=1
+hdmi_cvt 800 600 60 6 0 0 0
