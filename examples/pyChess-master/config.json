@@ -1,0 +1,54 @@
+{
+  "main": "",
+  "gui": {
+    "def_w": 500,
+    "def_h":500,
+    "canvas": {
+      "game": {
+        "offsets": {
+          "width": -200,
+          "height": -200
+        }
+      },
+      "home": {}
+    }
+  },
+  "states": {
+    "home": {
+      "eee": "rrr"
+    },
+    "game": {
+      "pieces": {
+        "king": {
+          "number": 1,
+          "move": {}
+        },
+        "queen": {
+          "number": 1,
+          "moves": {}
+        },
+        "rook": {
+          "number": 2,
+          "moves": {}
+        },
+        "bishop": {
+          "number": 2,
+          "moves": {}
+        },
+        "knight": {
+          "number": 2,
+          "moves": {}
+        },
+        "pawns": {
+          "number": 8,
+          "moves": {
+          }
+        }
+      },
+      "players": {
+        "1": {},
+        "2": {}
+      }
+    }
+  }
+}
