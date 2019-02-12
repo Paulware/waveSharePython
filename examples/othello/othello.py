@@ -64,7 +64,7 @@ def handleButton(data):
     BOARDHEIGHT = 8 # number of rows of icons
     
     if buttons.checkKey ("Start"):
-        data['quit'] = True
+        terminate()
 
     if buttons.checkKey ("Up"):
         if (mouseY > 0): 
@@ -119,7 +119,10 @@ def main():
     while True:
         if runGame() == False:
             break
-
+            
+def terminate():
+    pygame.quit()
+    sys.exit()
 
 def runGame():
     global mousex
@@ -150,9 +153,7 @@ def runGame():
         if turn == 'player':
             print ("Players turn") 
             if buttons.checkKey ("Start"):
-                print ("Start button detected, data[quit] = True" )
-                data['quit'] = True
-                break
+                terminate()
                 
             # Player's turn:
             if getValidMoves(mainBoard, playerTile) == []:
@@ -175,8 +176,6 @@ def runGame():
                 mousey = data ['mousey']
                 handleButton(data)
                 drawMouse()
-                if (data['quit'] ):
-                    pygame.quit()
                 
                 if (data['mouseClicked']): 
                     print ("Mouse was clicked [x,y]: [" + str(mousex) + "," + str(mousey) + "]")                
@@ -269,7 +268,7 @@ def runGame():
         if buttons.checkKey ("B"):
            return False
            
-        if button.checkKey ("A"):
+        if buttons.checkKey ("A"):
            return True
            
         DISPLAYSURF.blit(textSurf, textRect)
@@ -314,6 +313,7 @@ def animateTileChange(tilesToFlip, tileColor, additionalTile):
 
 
 def drawBoard(board):
+    global DISPLAYSURF
     # Draw background of board.
     DISPLAYSURF.blit(BGIMAGE, BGIMAGE.get_rect())
 

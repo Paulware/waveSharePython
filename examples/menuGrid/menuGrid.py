@@ -40,8 +40,6 @@ GRIDLINECOLOR = BLACK
 TEXTCOLOR = WHITE
 HINTCOLOR = BROWN
 
-print ("starting menuGrid?");
-
 def leftTopCoordsOfBox(boxx, boxy):
     left = (boxx * BOXSIZE) + XMARGIN
     top  = (boxy * BOXSIZE) + YMARGIN
@@ -119,17 +117,24 @@ def main():
     BGIMAGE = pygame.transform.smoothscale(BGIMAGE, (WINDOWWIDTH, WINDOWHEIGHT))
     BGIMAGE.blit(boardImage, boardImageRect)
 
-    # Run the main game.
-    while True:
-        if runGame() == False:
-            break
+    runGame()
+
+def runSelection (name):
+    global DISPLAYSURF
+    print ("Run " + name)
+    pygame.quit()
+    os.system ("python " + name + ".py")
+    pygame.init()
+    MAINCLOCK = pygame.time.Clock()
+    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))                   
+
 
 def runGame():
     global mousex
     global mousey
     global DISPLAYSURF
     global MAINCLOCK
-
+    
     tetrisSurf = FONT.render('Tetris', True, TEXTCOLOR, TEXTBGCOLOR2)
     tetrisRect = tetrisSurf.get_rect()
     tetrisRect.topright = (245, 110)   
@@ -138,7 +143,21 @@ def runGame():
     othelloRect = othelloSurf.get_rect()
     othelloRect.topright = (245, 160)   
     
+    memorySurf = FONT.render('Memory', True, TEXTCOLOR, TEXTBGCOLOR2)
+    memoryRect = memorySurf.get_rect()
+    memoryRect.topright = (245, 210) 
 
+    zombieSurf = FONT.render('Zombie Hat', True, TEXTCOLOR, TEXTBGCOLOR2)
+    zombieRect = zombieSurf.get_rect()
+    zombieRect.topright = (245, 260) 
+
+    ticTacToeSurf = FONT.render('TIC TAC TOE', True, TEXTCOLOR, TEXTBGCOLOR2)
+    ticTacToeRect = ticTacToeSurf.get_rect()
+    ticTacToeRect.topright = (245, 310) 
+
+    pacmanSurf = FONT.render('Pacman', True, TEXTCOLOR, TEXTBGCOLOR2)
+    pacmanRect = pacmanSurf.get_rect()
+    pacmanRect.topright = (245, 360) 
 
     # Reset the board and game.
     mainBoard = getNewBoard()
@@ -197,13 +216,20 @@ def runGame():
                 #movexy = getSpaceClicked(mousex, mousey)
                 movexy = data['movexy']
                 print ("Got space clicked :" + str(movexy))
-                if (movexy[0] == 0) and (movexy[1] == 0):
-                   print ("Run tetris")
-                   pygame.quit()
-                   os.system ("python tetris.py")
-                   pygame.init()
-                   MAINCLOCK = pygame.time.Clock()
-                   DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))                   
+                if (movexy == (0,0)):
+                   runSelection ("tetris")
+                elif (movexy == (0,1)):
+                   runSelection ("othello")
+                elif (movexy == (0,2)):
+                   runSelection ("memoryPuzzle")
+                elif (movexy == (0,3)):
+                   runSelection ("zombieHat")
+                elif (movexy == (0,4)):
+                   runSelection ("ticTacToe")
+                elif (movexy == (0,5)):
+                   os.chdir("/home/pacman")
+                   runSelection ("runPacman")
+                   os.chdir("/boot")
                    
 
             # Draw the game board.
@@ -215,6 +241,10 @@ def runGame():
             DISPLAYSURF.blit(hintsSurf, hintsRect)
             DISPLAYSURF.blit(tetrisSurf, tetrisRect)
             DISPLAYSURF.blit(othelloSurf, othelloRect)
+            DISPLAYSURF.blit(memorySurf, memoryRect)
+            DISPLAYSURF.blit(zombieSurf, zombieRect)
+            DISPLAYSURF.blit(ticTacToeSurf, ticTacToeRect)
+            DISPLAYSURF.blit(pacmanSurf, pacmanRect)
 
             MAINCLOCK.tick(FPS)
             pygame.display.update()
@@ -285,6 +315,7 @@ def animateTileChange(tilesToFlip, tileColor, additionalTile):
 
 
 def drawBoard(board):
+    global DISPLAYSURF
     # Draw background of board.
     DISPLAYSURF.blit(BGIMAGE, BGIMAGE.get_rect())
 
