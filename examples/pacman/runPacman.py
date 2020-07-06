@@ -19,9 +19,11 @@ from Ghost import Ghost
 from Walls import Walls
 from Pellets import Pellets
 from Sound import Sound
+import time
 
-
-
+def terminate():
+    pygame.quit()
+    sys.exit()
 
 # Create game objects
 background = pygame.image.load ("bg.png").convert ()
@@ -55,6 +57,8 @@ while True:
 
 # Game loop
 keepGoing_game = True
+foundButtons = False
+eventTime = time.time() 
 while keepGoing_game:
     # Round loop
     keepGoing_round = True
@@ -66,57 +70,68 @@ while keepGoing_game:
             pacman.moveLeft = True
             pacman.moveUp = pacman.moveDown = pacman.moveRight = False
             pacman.direction = 1
+            foundButtons = True
         elif buttons.checkKey ("Right"):
             pacman.moveRight = True
             pacman.moveUp = pacman.moveLeft = pacman.moveDown = False
             pacman.direction = 3        
+            foundButtons = True
         elif buttons.checkKey ("Up"):
             pacman.moveUp = True
             pacman.moveLeft = pacman.moveDown = pacman.moveRight = False
             pacman.direction = 0
+            foundButtons = True
         elif buttons.checkKey ("Down"):
             pacman.moveDown = True
             pacman.moveUp = pacman.moveLeft = pacman.moveRight = False
             pacman.direction = 2
-        else:
+            foundButtons = True
+        elif buttons.checkKey ("Select"):
+            terminate()
+        elif foundButtons:
             pacman.moveUp = pacman.moveLeft = pacman.moveDown = pacman.moveRight = False
-
-        '''
-        # Event handling
-        for event in pygame.event.get ():
-            # Quitting
-            if event.type == QUIT:
-                keepGoing_game = keepGoing_round = False
-
-            # Arrow key down
-            elif event.type == KEYDOWN:
-                if event.key == K_UP:
-                    pacman.moveUp = True
-                    pacman.moveLeft = pacman.moveDown = pacman.moveRight = False
-                    pacman.direction = 0
-                elif event.key == K_LEFT:
-                    pacman.moveLeft = True
-                    pacman.moveUp = pacman.moveDown = pacman.moveRight = False
-                    pacman.direction = 1
-                elif event.key == K_DOWN:
-                    pacman.moveDown = True
-                    pacman.moveUp = pacman.moveLeft = pacman.moveRight = False
-                    pacman.direction = 2
-                elif event.key == K_RIGHT:
-                    pacman.moveRight = True
-                    pacman.moveUp = pacman.moveLeft = pacman.moveDown = False
-                    pacman.direction = 3
-
-            # Arrow key up
-            elif event.type == KEYUP:
-                pacman.moveUp = pacman.moveLeft = pacman.moveDown = pacman.moveRight = False
-        '''
         
-        # Move pacman rectangle
-        pacman.move (walls)
+        if time.time() > eventTime: 
+           eventTime = time.time() + 0.035
+           # Event handling
+           for event in pygame.event.get ():
+               # Quitting
+               if event.type == QUIT:
+                   keepGoing_game = keepGoing_round = False
 
-        # Check if pacman must teleport to the other side
-        pacman.teleport ()
+               # Arrow key down
+               elif event.type == KEYDOWN:
+                   print ("Got a key press with event.key: " + str(event.key) ) 
+                   
+                   if (event.key == K_UP) or (event.key == 'A') or (event.key == 'a'):
+                       print ("Got a Up arrow key pressed" )
+                       pacman.moveUp = True
+                       pacman.moveLeft = pacman.moveDown = pacman.moveRight = False
+                       pacman.direction = 0
+                   elif event.key == K_LEFT:
+                       pacman.moveLeft = True
+                       pacman.moveUp = pacman.moveDown = pacman.moveRight = False
+                       pacman.direction = 1
+                   elif event.key == K_DOWN:
+                       pacman.moveDown = True
+                       pacman.moveUp = pacman.moveLeft = pacman.moveRight = False
+                       pacman.direction = 2
+                   elif event.key == K_RIGHT:
+                       pacman.moveRight = True
+                       pacman.moveUp = pacman.moveLeft = pacman.moveDown = False
+                       pacman.direction = 3
+                   
+
+               # Arrow key up
+               elif event.type == KEYUP:
+                   pacman.moveUp = pacman.moveLeft = pacman.moveDown = pacman.moveRight = False
+        
+        
+           # Move pacman rectangle
+           pacman.move (walls)
+
+           # Check if pacman must teleport to the other side
+           pacman.teleport ()
 
         # Animate and rotate pacman sprite
         pacman.getSurface ()

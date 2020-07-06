@@ -23,6 +23,7 @@ class Pacman (Character):
         self.moveUp = self.moveLeft = self.moveDown = self.moveRight = False
         self.score = 0
         self.lives = 3
+        self.lastDirection = 0
 
     def reset (self):
         '''in - (self)
@@ -55,15 +56,31 @@ class Pacman (Character):
     def move (self, walls):
         '''in - (self, list of walls)
         Determines what direction to move in and moves pacman.'''
-        if self.moveUp and self.canMove (0, walls):
-            Character.move (self, 0)
-        if self.moveLeft and self.canMove (1, walls):
-            Character.move (self, 1)
-        if self.moveDown and self.canMove (2, walls):
-            Character.move (self, 2)
-        if self.moveRight and self.canMove (3, walls):
-            Character.move (self, 3)
-
+        if self.moveUp:
+            if self.canMove (0, walls):
+               Character.move (self, 0)
+               self.lastDirection = 0
+            elif self.canMove (self.lastDirection, walls):
+               Character.move (self, self.lastDirection)               
+        if self.moveLeft:
+            if self.canMove (1, walls):
+               Character.move (self, 1)
+               self.lastDirection = 1
+            elif self.canMove (self.lastDirection, walls):
+               Character.move (self, self.lastDirection)
+        if self.moveDown:
+            if self.canMove (2, walls):
+               Character.move (self, 2)
+               self.lastDirection = 2
+            elif self.canMove (self.lastDirection, walls):
+               Character.move (self, self.lastDirection)
+        if self.moveRight:
+            if self.canMove (3, walls):
+               Character.move (self, 3)
+               self.lastDirection = 3
+            elif self.canMove (self.lastDirection, walls):
+               Character.move (self, self.lastDirection)
+        
     def teleport (self):
         '''in - (self)
         Determines if pacman collided with one of teleport locations and moves him.'''
